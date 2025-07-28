@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>adultswimarabia - Watch Movies Online</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #000;
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(255, 255, 255, 0.03) 2px,
+                rgba(255, 255, 255, 0.03) 4px
+            );
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: #000;
+            border-bottom: 3px solid #fff;
+            padding: 1rem 2rem;
+            z-index: 999;
+            font-weight: bold;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #fff;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            background: #fff;
+            color: #000;
+            padding: 0.2rem 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            padding: 0.3rem 0.8rem;
+        }
+
+        .nav-links a:hover {
+            background: #fff;
+            color: #000;
+            border: 2px solid #fff;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: #000;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
+            animation: staticNoise 0.1s infinite linear;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            border: 3px solid #fff;
+            padding: 3rem;
+            background: #000;
+            animation: glitchBox 4s infinite;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-weight: bold;
+            animation: glitchText 2s infinite;
+        }
+
+        .hero p {
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: #000;
+            color: #fff;
+            text-decoration: none;
+            border: 3px solid #fff;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            font-family: 'Courier New', monospace;
+        }
+
+        .cta-button:hover {
+            background: #fff;
+            color: #000;
+            transform: scale(1.05);
+        }
+
+        .section {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            border-top: 3px solid #fff;
+        }
+
+        .section h2 {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            border: 3px solid #fff;
+            padding: 1rem;
+            background: #000;
+            animation: flashBorder 3s infinite;
+        }
+
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .movie-card {
+            background: #000;
+            border: 3px solid #fff;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .movie-card:hover {
+            background: #fff;
+            color: #000;
+            transform: scale(1.02);
+        }
+
+        .movie-card:hover .movie-title {
+            color: #000;
+        }
+
+        .movie-card:hover .watch-button {
+            background: #000;
+            color: #fff;
+        }
+
+        .movie-poster {
+            width: 100%;
+            height: 200px;
+            background: #fff;
+            color: #000;
+            border: 3px solid #000;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: bold;
+        }
+
+        .movie-card:hover .movie-poster {
+            background: #000;
+            color: #fff;
+            border: 3px solid #fff;
+        }
+
+        .movie-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        .movie-info {
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        .watch-button {
+            background: #fff;
+            color: #000;
+            border: 3px solid #000;
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-family: 'Courier New', monospace;
+        }
+
+        .watch-button:hover {
+            background: #000;
+            color: #fff;
+            border: 3px solid #fff;
+        }
+
+        .movie-page {
+            display: none;
+            padding-top: 100px;
+        }
+
+        .movie-player {
+            background: #000;
+            border: 3px solid #fff;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.2rem;
+            border-bottom: 3px solid #fff;
+        }
+
+        .play-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            color: #000;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid #000;
+            font-weight: bold;
+        }
+
+        .play-overlay:hover {
+            background: #000;
+            color: #fff;
+            border: 3px solid #fff;
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        .movie-details {
+            background: #000;
+            border: 3px solid #fff;
+            padding: 2rem;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-bottom: 2rem;
+            padding: 0.8rem 1.5rem;
+            background: #000;
+            color: #fff;
+            text-decoration: none;
+            border: 3px solid #fff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            font-family: 'Courier New', monospace;
+        }
+
+        .back-button:hover {
+            background: #fff;
+            color: #000;
+        }
+
+        .glitch-box {
+            border: 3px solid #fff;
+            background: #000;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .controls-panel {
+            background: #000;
+            border-top: 3px solid #fff;
+            padding: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .control-btn {
+            background: #fff;
+            color: #000;
+            border: 3px solid #000;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            font-family: 'Courier New', monospace;
+        }
+
+        .control-btn:hover {
+            background: #000;
+            color: #fff;
+            border: 3px solid #fff;
+        }
+
+        @keyframes glitchText {
+            0%, 100% {
+                text-shadow: 0 0 0 #fff;
+            }
+            25% {
+                text-shadow: -2px 0 0 #fff, 2px 0 0 #000;
+            }
+            50% {
+                text-shadow: 2px 0 0 #fff, -2px 0 0 #000;
+            }
+            75% {
+                text-shadow: 0 0 0 #fff;
+            }
+        }
+
+        @keyframes glitchBox {
+            0%, 100% {
+                transform: translate(0);
+            }
+            20% {
+                transform: translate(-2px, 2px);
+            }
+            40% {
+                transform: translate(-2px, -2px);
+            }
+            60% {
+                transform: translate(2px, 2px);
+            }
+            80% {
+                transform: translate(2px, -2px);
+            }
+        }
+
+        @keyframes flashBorder {
+            0%, 100% {
+                border-color: #fff;
+            }
+            50% {
+                border-color: #666;
+            }
+        }
+
+        @keyframes staticNoise {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0.8;
+            }
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .feature-item {
+            text-align: center;
+            padding: 1rem;
+            background: #000;
+            border: 3px solid #fff;
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            background: #fff;
+            color: #000;
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+                letter-spacing: 2px;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .movie-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .video-container {
+                height: 300px;
+            }
+            
+            .hero-content {
+                padding: 2rem;
+            }
+            
+            .controls-panel {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="scanlines"></div>
+
+    <nav class="navbar" id="navbar">
+        <div class="nav-content">
+            <div class="logo" onclick="showHomepage()">adultswimarabia</div>
+            <ul class="nav-links">
+                <li><a href="#" onclick="showHomepage()">Home</a></li>
+                <li><a href="#">Shows</a></li>
+                <li><a href="#">Games</a></li>
+                <li><a href="#">Videos</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div id="homepage">
+        <section class="hero">
+            <div class="hero-content">
+                <h1>adultswimarabia</h1>
+                <p>Watch. Stream. Swim.</p>
+                <a href="#movies" class="cta-button">Enter</a>
+            </div>
+        </section>
+
+        <section class="section" id="movies">
+            <h2>Featured Content</h2>
+            
+            <div class="movie-grid">
+                <div class="movie-card" onclick="watchMovie('ROBOT CHICKEN', 'Animation • Comedy', '2024', 'Stop-motion sketch comedy featuring pop culture parodies and dark humor.')">
+                    <div class="movie-poster">🤖</div>
+                    <h3 class="movie-title">Robot Chicken</h3>
+                    <p class="movie-info">Animation • Comedy • 2024</p>
+                    <button class="watch-button">Watch Now</button>
+                </div>
+
+                <div class="movie-card" onclick="watchMovie('RICK AND MORTY', 'Animation • Sci-Fi', '2024', 'Interdimensional adventures of a genius scientist and his grandson.')">
+                    <div class="movie-poster">🛸</div>
+                    <h3 class="movie-title">Rick and Morty</h3>
+                    <p class="movie-info">Animation • Sci-Fi • 2024</p>
+                    <button class="watch-button">Watch Now</button>
+                </div>
+
+                <div class="movie-card" onclick="watchMovie('AQUA TEEN HUNGER FORCE', 'Animation • Comedy', '2024', 'Surreal adventures of anthropomorphic fast food items.')">
+                    <div class="movie-poster">🍟</div>
+                    <h3 class="movie-title">Aqua Teen Hunger Force</h3>
+                    <p class="movie-info">Animation • Comedy • 2024</p>
+                    <button class="watch-button">Watch Now</button>
+                </div>
+
+                <div class="movie-card" onclick="watchMovie('THE ERIC ANDRE SHOW', 'Comedy • Talk Show', '2024', 'Surreal and chaotic anti-talk show with bizarre interviews.')">
+                    <div class="movie-poster">📺</div>
+                    <h3 class="movie-title">The Eric Andre Show</h3>
+                    <p class="movie-info">Comedy • Talk Show • 2024</p>
+                    <button class="watch-button">Watch Now</button>
+                </div>
+
+                <div class="movie-card" onclick="watchMovie('METALOCALYPSE', 'Animation • Metal', '2024', 'Death metal band navigates fame and supernatural threats.')">
+                    <div class="movie-poster">🎸</div>
+                    <h3 class="movie-title">Metalocalypse</h3>
+                    <p class="movie-info">Animation • Metal • 2024</p>
+                    <button class="watch-button">Watch Now</button>
+                </div>
+
+                <div class="movie-card" onclick="watchMovie('VENTURE BROS', 'Animation • Adventure', '2024', 'Parody of classic adventure cartoons with dark comedy.')">
+                    <div class="movie-poster">⚡</div>
+                    <h3 class="movie-title">Venture Bros</h3>
+                    <p class="movie-info">Animation • Adventure • 2024</p>
+                    <button class="watch-button">Watch Now</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="moviePage" class="movie-page">
+        <div class="section">
+            <a href="#" class="back-button" onclick="showHomepage()">← Back</a>
+            
+            <div class="movie-player">
+                <div class="video-container" id="videoContainer">
+                    <div class="play-overlay" onclick="playVideo()">
+                        <span>▶</span>
+                    </div>
+                    <div id="videoPlaceholder">[ CLICK TO PLAY ]</div>
+                </div>
+                <div class="controls-panel">
+                    <button class="control-btn" onclick="pauseVideo()">PAUSE</button>
+                    <button class="control-btn" onclick="rewindVideo()">REW</button>
+                    <button class="control-btn" onclick="fastForward()">FF</button>
+                    <button class="control-btn" onclick="fullscreen()">FULL</button>
+                </div>
+            </div>
+
+            <div class="movie-details">
+                <h1 id="movieTitle" style="font-size: 2.5rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 2px;"></h1>
+                <p id="movieGenre" style="font-size: 1.2rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 1px;"></p>
+                <div class="glitch-box">
+                    <p id="movieDescription" style="line-height: 1.6;"></p>
+                </div>
+                
+                <div style="margin-top: 2rem;">
+                    <h3 style="margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 2px; border-bottom: 3px solid #fff; padding-bottom: 0.5rem;">Stream Features</h3>
+                    <div class="feature-grid">
+                        <div class="feature-item">
+                            <div class="feature-icon">HD</div>
+                            <div>High Definition</div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">CC</div>
+                            <div>Closed Captions</div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">24/7</div>
+                            <div>Always On</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentMovie = null;
+
+        function watchMovie(title, genre, year, description) {
+            currentMovie = { title, genre, year, description };
+            document.getElementById('movieTitle').textContent = title;
+            document.getElementById('movieGenre').textContent = genre + ' • ' + year;
+            document.getElementById('movieDescription').textContent = description;
+            
+            document.getElementById('homepage').style.display = 'none';
+            document.getElementById('moviePage').style.display = 'block';
+            
+            // Reset video player
+            const videoContainer = document.getElementById('videoContainer');
+            videoContainer.innerHTML = `
+                <div class="play-overlay" onclick="playVideo()">
+                    <span>▶</span>
+                </div>
+                <div id="videoPlaceholder">[ CLICK TO PLAY ]</div>
+            `;
+            
+            window.scrollTo(0, 0);
+        }
+
+        function showHomepage() {
+            document.getElementById('homepage').style.display = 'block';
+            document.getElementById('moviePage').style.display = 'none';
+            window.scrollTo(0, 0);
+        }
+
+        function playVideo() {
+            const videoContainer = document.getElementById('videoContainer');
+            videoContainer.innerHTML = `
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; animation: glitchText 3s infinite;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem; border: 3px solid #fff; padding: 1rem; background: #000;">▶</div>
+                    <h3 style="margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 2px;">NOW STREAMING</h3>
+                    <p style="text-transform: uppercase; letter-spacing: 1px;">${currentMovie ? currentMovie.title : 'CONTENT'}</p>
+                    <div style="margin-top: 2rem; border: 3px solid #fff; padding: 1rem; background: #000;">
+                        <p style="text-transform: uppercase; letter-spacing: 1px;">[ ADULT SWIM STREAM ACTIVE ]</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function pauseVideo() {
+            const videoContainer = document.getElementById('videoContainer');
+            videoContainer.innerHTML = `
+                <div class="play-overlay" onclick="playVideo()">
+                    <span>▶</span>
+                </div>
+                <div style="text-transform: uppercase; letter-spacing: 2px;">[ PAUSED ]</div>
+            `;
+        }
+
+        function rewindVideo() {
+            alert('[ REWINDING ]');
+        }
+
+        function fastForward() {
+            alert('[ FAST FORWARD ]');
+        }
+
+        function fullscreen() {
+            alert('[ FULLSCREEN MODE ]');
+        }
+
+        // Add random glitch effects
+        setInterval(() => {
+            const elements = document.querySelectorAll('.movie-card, .hero-content, .section h2');
+            const randomElement = elements[Math.floor(Math.random() * elements.length)];
+            if (randomElement && Math.random() < 0.1) {
+                randomElement.style.animation = 'glitchBox 0.3s ease-out';
+                setTimeout(() => {
+                    randomElement.style.animation = '';
+                }, 300);
+            }
+        }, 2000);
+
+        // Static noise effect
+        const scanlines = document.querySelector('.scanlines');
+        setInterval(() => {
+            scanlines.style.opacity = Math.random() * 0.1 + 0.9;
+        }, 100);
+    </script>
+</body>
+</html>
